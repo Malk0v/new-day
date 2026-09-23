@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кошик | ВІСК</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти до основного контенту</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="/" class="logo">ВІСК</a>
+      <nav class="main-nav" id="main-nav" aria-label="Основна навігація" data-open="false">
+        <ul>
+          <li><a href="/#catalog">Каталог</a></li>
+          <li><a href="/#about">Про майстерню</a></li>
+          <li><a href="/#contacts">Контакти</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="/cart.html" class="cart-link" aria-label="Кошик">
+          Кошик <span data-cart-count></span>
+        </a>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Відкрити меню">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="nav-scrim" data-open="false"></div>
+  </header>
+
+  <main id="main-content" class="container section">
+    <h1>Кошик</h1>
+    <div id="cart-root" aria-live="polite"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>
+        <p><strong>ВІСК</strong> · Київ, Україна</p>
+        <p>+380 00 000 00 00 · hello@example.com</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/products-data.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    function renderCart() {
+      const root = document.getElementById("cart-root");
+      const lines = cartLines();
+
+      if (lines.length === 0) {
+        root.innerHTML = `
+          <div class="empty-state">
+            <p>Кошик поки порожній.</p>
+            <p><a href="/#catalog" class="btn">Перейти в каталог</a></p>
+          </div>`;
+        return;
+      }
+
+      let rows = "";
+      for (const l of lines) {
+        rows += `
+          <tr>
+            <td class="cart-item__name">${l.product.name}<br><span style="color:var(--wick-soft); font-size:0.85rem;">Діаметр: ${l.variant.label}</span></td>
+            <td>${formatUAH(l.variant.price)}</td>
+            <td><input type="number" class="cart-qty" min="1" max="10" value="${l.qty}" data-key="${l.key}" aria-label="Кількість: ${l.product.name}, ${l.variant.label}"></td>
+            <td>${formatUAH(l.lineTotal)}</td>
+            <td><button class="cart-item__remove" data-remove="${l.key}" aria-label="Прибрати ${l.product.name}, ${l.variant.label}">Прибрати</button></td>
+          </tr>`;
+      }
+
+      root.innerHTML = `
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th scope="col">Товар</th>
+              <th scope="col">Ціна</th>
+              <th scope="col">Кількість</th>
+              <th scope="col">Сума</th>
+              <th scope="col"><span class="visually-hidden">Дії</span></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div class="cart-summary">
+          <div class="cart-summary__row cart-summary__total">
+            <span>Разом</span><span>${formatUAH(cartTotal())}</span>
+          </div>
+        </div>
+        <p style="text-align:right; margin-top:20px;">
+          <a href="/checkout.html" class="btn">Оформити замовлення</a>
+        </p>`;
+
+      root.querySelectorAll("[data-remove]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          cartRemove(btn.getAttribute("data-remove"));
+          renderCart();
+        });
+      });
+
+      root.querySelectorAll(".cart-qty").forEach((input) => {
+        input.addEventListener("change", () => {
+          const qty = Math.max(1, parseInt(input.value, 10) || 1);
+          cartSetQty(input.getAttribute("data-key"), qty);
+          renderCart();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", renderCart);
+  </script>
+</body>
+</html>
