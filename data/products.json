@@ -3,9 +3,7 @@
     "id": 1,
     "name": "Гак",
     "description": "Гак металевий",
-    "images": [
-      "img/cru.jpg"
-    ],
+    "images": ["img/cru.jpg"],
     "category": "Гак",
     "options": [
       {
@@ -26,9 +24,7 @@
     "id": 2,
     "name": "Конус",
     "description": "Насадка для приготування птиці",
-    "images": [
-      "img/con.jpg"
-    ],
+    "images": ["img/con.jpg"],
     "category": "Насадка",
     "options": [
       {
@@ -41,9 +37,7 @@
     "id": 3,
     "name": "Насадка для Птиці",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 1см більший",
-    "images": [
-      "img/pticha.jpg"
-    ],
+    "images": ["img/pticha.jpg"],
     "category": "Насадка",
     "options": [
       {
@@ -92,9 +86,7 @@
     "id": 4,
     "name": "Насадка Ялинка",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 1см більший",
-    "images": [
-      "img/el.jpg"
-    ],
+    "images": ["img/el.jpg"],
     "category": "Насадка",
     "options": [
       {
@@ -143,9 +135,7 @@
     "id": 5,
     "name": "Насадка Шампурниця",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 1см більший",
-    "images": [
-      "img/sha.jpg"
-    ],
+    "images": ["img/sha.jpg"],
     "category": "Насадка",
     "options": [
       {
@@ -195,7 +185,10 @@
     "name": "Набір 4в1",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 2см більший",
     "images": [
-      "img/4in1.jpg"
+      "img/4in1.jpg",
+      "img/4in1-1.jpg",
+      "img/4in1-2.jpg",
+      "img/4in1-3.jpg"
     ],
     "category": "Набір 4в1",
     "options": [
@@ -241,9 +234,7 @@
     "id": 7,
     "name": "Сітка звичайна 2х рівнева",
     "description": "ВАЖЛИВО! вказаний розмір рабочої поверхні, загальний діаметр виробу на 2см більший",
-    "images": [
-      "img/2x.jpg"
-    ],
+    "images": ["img/2x.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -288,9 +279,7 @@
     "id": 8,
     "name": "Сітка звичайна 3х рівнева",
     "description": "ВАЖЛИВО! вказаний розмір рабочої поверхні, загальний діаметр виробу на 2см більший",
-    "images": [
-      "img/3x.jpg"
-    ],
+    "images": ["img/3x.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -335,9 +324,7 @@
     "id": 9,
     "name": "Сітка 2 яруси модель 1",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 1см більший",
-    "images": [
-      "img/s2xi.jpg"
-    ],
+    "images": ["img/s2xi.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -382,9 +369,7 @@
     "id": 10,
     "name": "Сітка 3 яруси модель 1",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 1см більший",
-    "images": [
-      "img/s3xi.jpg"
-    ],
+    "images": ["img/s3xi.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -429,9 +414,7 @@
     "id": 11,
     "name": "Сітка 2 яруси универсальна",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 2см більший",
-    "images": [
-      "img/s2xiii.jpg"
-    ],
+    "images": ["img/s2xiii.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -476,9 +459,7 @@
     "id": 12,
     "name": "Сітка 3 яруси универсальна",
     "description": "ВАЖЛИВО! вказаний розмір сковорідки, загальний діаметр виробу на 2см більший",
-    "images": [
-      "img/s3xiii.jpg"
-    ],
+    "images": ["img/s3xiii.jpg"],
     "category": "Сітка",
     "options": [
       {
@@ -523,9 +504,7 @@
     "id": 13,
     "name": "Сковорідка чугунна",
     "description": "Чугуна сковорідка в асертименті",
-    "images": [
-      "img/patelnia.jpg"
-    ],
+    "images": ["img/patelnia.jpg"],
     "category": "Сковорідка",
     "options": [
       {
@@ -570,9 +549,7 @@
     "id": 14,
     "name": "Чохол",
     "description": "Чохол для тандиру з якісноі не промокаючоі тканини",
-    "images": [
-      "img/case.jpg"
-    ],
+    "images": ["img/case.jpg"],
     "category": "Чохол",
     "options": [
       {
