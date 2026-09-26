@@ -15,13 +15,13 @@
       init(results[0], results[1]);
     })
     .catch(function (err) {
-      console.error("Не удалось загрузить данные магазина:", err);
+      console.error("Не вдалося завантажити дані магазину:", err);
       var root = document.getElementById("products-root");
       if (root) {
         root.innerHTML =
-          '<p style="color:var(--text-secondary)">Не удалось загрузить каталог. ' +
-          'Если вы открыли файл напрямую (file://) — запустите локальный сервер ' +
-          '(например <code>python3 -m http.server</code>) и откройте сайт через http://localhost.</p>';
+          '<p style="color:var(--text-secondary)">Не вдалося завантажити каталог. ' +
+          'Якщо ви відкрили файл напряму (file://) — запустіть локальний сервер ' +
+          '(наприклад <code>python3 -m http.server</code>) і відкрийте сайт через http://localhost.</p>';
       }
     });
 
@@ -201,29 +201,6 @@
       }
 
       if (images.length > 1) {
-        var prevBtn = document.createElement("button");
-        prevBtn.type = "button";
-        prevBtn.className = "carousel-arrow prev";
-        prevBtn.setAttribute("aria-label", "Предыдущее фото");
-        prevBtn.innerHTML = "‹";
-        prevBtn.addEventListener("click", function (e) {
-          e.stopPropagation();
-          goTo(current - 1);
-        });
-
-        var nextBtn = document.createElement("button");
-        nextBtn.type = "button";
-        nextBtn.className = "carousel-arrow next";
-        nextBtn.setAttribute("aria-label", "Следующее фото");
-        nextBtn.innerHTML = "›";
-        nextBtn.addEventListener("click", function (e) {
-          e.stopPropagation();
-          goTo(current + 1);
-        });
-
-        wrap.appendChild(prevBtn);
-        wrap.appendChild(nextBtn);
-
         dotsWrap = document.createElement("div");
         dotsWrap.className = "carousel-dots";
         images.forEach(function (_, i) {
@@ -239,18 +216,36 @@
         });
         wrap.appendChild(dotsWrap);
 
-        var touchStartX = null;
-        wrap.addEventListener("touchstart", function (e) {
-          touchStartX = e.touches[0].clientX;
-        }, { passive: true });
-        wrap.addEventListener("touchend", function (e) {
-          if (touchStartX === null) return;
-          var dx = e.changedTouches[0].clientX - touchStartX;
-          if (Math.abs(dx) > 30) {
+        // Swipe via Pointer Events — one implementation covers touch (phone),
+        // mouse drag (desktop) and pen alike.
+        var pointerStartX = null;
+        var pointerStartY = null;
+        var didSwipe = false;
+
+        wrap.addEventListener("pointerdown", function (e) {
+          pointerStartX = e.clientX;
+          pointerStartY = e.clientY;
+          didSwipe = false;
+        });
+        wrap.addEventListener("pointerup", function (e) {
+          if (pointerStartX === null) return;
+          var dx = e.clientX - pointerStartX;
+          var dy = e.clientY - pointerStartY;
+          if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
+            didSwipe = true;
             dx < 0 ? goTo(current + 1) : goTo(current - 1);
           }
-          touchStartX = null;
-        }, { passive: true });
+          pointerStartX = null;
+        });
+        // A swipe shouldn't also register as "the card was tapped" and pop
+        // the product modal open — swallow that one click.
+        wrap.addEventListener("click", function (e) {
+          if (didSwipe) {
+            e.stopPropagation();
+            e.preventDefault();
+            didSwipe = false;
+          }
+        });
       }
 
       return wrap;
@@ -260,7 +255,7 @@
     // 2. HELPERS
     // ====================================================================
     function formatPrice(n) {
-      return n.toLocaleString("ru-RU") + " " + CURRENCY;
+      return n.toLocaleString("uk-UA") + " " + CURRENCY;
     }
 
     function findVariant(productId, diameter) {
@@ -368,7 +363,7 @@
       allBtn.type = "button";
       allBtn.className = "filter-pill active";
       allBtn.dataset.cat = "all";
-      allBtn.textContent = "Все";
+      allBtn.textContent = "Всі";
       filterWrap.appendChild(allBtn);
 
       categories.forEach(function (cat) {
@@ -445,13 +440,13 @@
 
       var fieldLabel = document.createElement("span");
       fieldLabel.className = "field-label";
-      fieldLabel.textContent = "Вариант";
+      fieldLabel.textContent = "Варіант";
       productModalBody.appendChild(fieldLabel);
 
       var pillWrap = document.createElement("div");
       pillWrap.className = "diam-select";
       pillWrap.setAttribute("role", "group");
-      pillWrap.setAttribute("aria-label", "Выбор варианта");
+      pillWrap.setAttribute("aria-label", "Вибір варіанта");
       productModalBody.appendChild(pillWrap);
 
       var priceRow = document.createElement("div");
@@ -462,7 +457,7 @@
       var addBtn = document.createElement("button");
       addBtn.className = "btn btn-primary";
       addBtn.id = "pd-add-btn";
-      addBtn.textContent = "Добавить в корзину";
+      addBtn.textContent = "Додати в кошик";
       productModalBody.appendChild(addBtn);
 
       var addedNote = document.createElement("p");
@@ -494,7 +489,7 @@
 
       addBtn.addEventListener("click", function () {
         addToCart(product.id, pdSelectedDiameter[product.id]);
-        addedNote.textContent = "Добавлено — " + pdSelectedDiameter[product.id];
+        addedNote.textContent = "Додано — " + pdSelectedDiameter[product.id];
       });
 
       function updatePdPrice(p) {
@@ -574,7 +569,7 @@
       }
 
       if (cart.length === 0) {
-        body.innerHTML = '<div class="empty-cart">Корзина пуста.<br>Добавьте товар из каталога.</div>';
+        body.innerHTML = '<div class="empty-cart">Кошик порожній.<br>Додайте товар з каталогу.</div>';
         foot.style.display = "none";
         return;
       }
@@ -594,13 +589,13 @@
           '<p class="cart-item-meta">' + item.diameter + '</p>' +
           '<div class="cart-item-row">' +
             '<div class="qty-control">' +
-              '<button data-act="minus" aria-label="Уменьшить">−</button>' +
+              '<button data-act="minus" aria-label="Зменшити">−</button>' +
               '<span class="qty-val">' + item.qty + '</span>' +
-              '<button data-act="plus" aria-label="Увеличить">+</button>' +
+              '<button data-act="plus" aria-label="Збільшити">+</button>' +
             '</div>' +
             '<span class="cart-item-price">' + formatPrice(found.variant.price * item.qty) + '</span>' +
           '</div>' +
-          '<button class="remove-link" data-act="remove">Удалить</button>';
+          '<button class="remove-link" data-act="remove">Видалити</button>';
 
         row.appendChild(buildVisual(found.product, "cart-item-visual"));
         row.appendChild(infoDiv);
@@ -672,7 +667,7 @@
     // 8. CHECKOUT
     // ====================================================================
     function renderCheckoutForm() {
-      modalTitle.textContent = "Оформление заказа";
+      modalTitle.textContent = "Оформлення замовлення";
 
       var summaryRows = cart.map(function (item) {
         var found = findVariant(item.productId, item.diameter);
@@ -683,29 +678,29 @@
       modalBody.innerHTML =
         '<div class="order-summary">' +
           summaryRows +
-          '<div class="order-summary-row total"><span>Итого</span><span>' + formatPrice(cartTotal()) + '</span></div>' +
+          '<div class="order-summary-row total"><span>Разом</span><span>' + formatPrice(cartTotal()) + '</span></div>' +
         '</div>' +
         '<form id="checkout-form" novalidate>' +
           '<div class="form-field" data-field="name">' +
-            '<label for="f-name">Имя</label>' +
-            '<input id="f-name" type="text" autocomplete="name" placeholder="Как к вам обращаться">' +
-            '<span class="form-error">Введите имя</span>' +
+            '<label for="f-name">Ім\u2019я</label>' +
+            '<input id="f-name" type="text" autocomplete="name" placeholder="Як до вас звертатися">' +
+            '<span class="form-error">Введіть ім\u2019я</span>' +
           '</div>' +
           '<div class="form-field" data-field="phone">' +
             '<label for="f-phone">Телефон</label>' +
             '<input id="f-phone" type="tel" autocomplete="tel" placeholder="+380 __ ___ __ __">' +
-            '<span class="form-error">Введите корректный номер телефона</span>' +
+            '<span class="form-error">Введіть коректний номер телефону</span>' +
           '</div>' +
           '<div class="form-field" data-field="city">' +
-            '<label for="f-city">Город и отделение Новой почты</label>' +
-            '<input id="f-city" type="text" placeholder="Напр.: Одесса, отделение №5">' +
-            '<span class="form-error">Укажите город и отделение</span>' +
+            '<label for="f-city">Місто та відділення Нової пошти</label>' +
+            '<input id="f-city" type="text" placeholder="Напр.: Одеса, відділення №5">' +
+            '<span class="form-error">Вкажіть місто та відділення</span>' +
           '</div>' +
           '<div class="form-field" data-field="comment">' +
-            '<label for="f-comment">Комментарий (необязательно)</label>' +
-            '<textarea id="f-comment" placeholder="Пожелания к заказу"></textarea>' +
+            '<label for="f-comment">Коментар (необов\u2019язково)</label>' +
+            '<textarea id="f-comment" placeholder="Побажання до замовлення"></textarea>' +
           '</div>' +
-          '<button type="submit" class="btn btn-primary">Подтвердить заказ</button>' +
+          '<button type="submit" class="btn btn-primary">Підтвердити замовлення</button>' +
         '</form>';
 
       var form = document.getElementById("checkout-form");
@@ -766,7 +761,7 @@
       if (!tg || !tg.botToken || !tg.chatId) return;
 
       var lines = [];
-      lines.push("🔥 Новый заказ " + order.number);
+      lines.push("🔥 Нове замовлення " + order.number);
       lines.push("");
       order.items.forEach(function (item) {
         var found = findVariant(item.productId, item.diameter);
@@ -774,12 +769,12 @@
         lines.push("• " + found.product.name + " (" + item.diameter + ") × " + item.qty + " — " + formatPrice(found.variant.price * item.qty));
       });
       lines.push("");
-      lines.push("Итого: " + formatPrice(order.total));
+      lines.push("Разом: " + formatPrice(order.total));
       lines.push("");
-      lines.push("Имя: " + order.name);
+      lines.push("Ім'я: " + order.name);
       lines.push("Телефон: " + order.phone);
-      lines.push("Город/отделение: " + order.city);
-      if (order.comment) lines.push("Комментарий: " + order.comment);
+      lines.push("Місто/відділення: " + order.city);
+      if (order.comment) lines.push("Коментар: " + order.comment);
 
       var url = "https://api.telegram.org/bot" + tg.botToken + "/sendMessage";
       fetch(url, {
@@ -820,13 +815,13 @@
     }
 
     function renderSuccess(order) {
-      modalTitle.textContent = "Заказ принят";
+      modalTitle.textContent = "Замовлення прийнято";
       modalBody.innerHTML =
         '<div class="success-view">' +
           '<svg class="success-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M8 12.5l2.6 2.6L16 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '<h3>Спасибо, ' + escapeHtml(order.name) + '!</h3>' +
-          '<p>Заказ №' + order.number + ' на сумму ' + formatPrice(order.total) + ' принят. Мы свяжемся с вами по номеру ' + escapeHtml(order.phone) + ' для подтверждения деталей и оплаты.</p>' +
-          '<button class="btn btn-secondary" id="close-success">Закрыть</button>' +
+          '<h3>Дякуємо, ' + escapeHtml(order.name) + '!</h3>' +
+          '<p>Замовлення №' + order.number + ' на суму ' + formatPrice(order.total) + ' прийнято. Ми зв\u2019яжемося з вами за номером ' + escapeHtml(order.phone) + ' для підтвердження деталей та оплати.</p>' +
+          '<button class="btn btn-secondary" id="close-success">Закрити</button>' +
         '</div>';
       document.getElementById("close-success").addEventListener("click", closeModal);
     }
