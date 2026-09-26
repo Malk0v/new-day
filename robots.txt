@@ -1,7 +1,5 @@
+# Замените your-domain.example на ваш настоящий домен после размещения сайта
 User-agent: *
 Allow: /
-Disallow: /cart.html
-Disallow: /checkout.html
-Disallow: /success.html
 
-Sitemap: https://example-vosk-shop.netlify.app/sitemap.xml
+Sitemap: https://your-domain.example/sitemap.xml
