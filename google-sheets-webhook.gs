@@ -24,16 +24,16 @@
  *    (или "Управление развёртываниями" → редактировать), иначе изменения не применятся к рабочей ссылке.
  */
 
-var SECRET_KEY = "ЗАМЕНИТЕ_НА_СВОЙ_СЕКРЕТНЫЙ_КЛЮЧ";
+var SECRET_KEY = "1FqkGbJrlVwbMEK_vlwebccyTdee2_icP2mCOAQau1tacVRiSbJsKgTOm";
 
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
 
     if (data.secret !== SECRET_KEY) {
-      return ContentService
-        .createTextOutput(JSON.stringify({ status: "error", message: "invalid secret" }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(
+        JSON.stringify({ status: "error", message: "invalid secret" }),
+      ).setMimeType(ContentService.MimeType.JSON);
     }
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
@@ -45,16 +45,15 @@ function doPost(e) {
       data.city || "",
       data.comment || "",
       data.items || "",
-      data.total || ""
+      data.total || "",
     ]);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "success" }))
-      .setMimeType(ContentService.MimeType.JSON);
-
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "success" }),
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "error", message: err.toString() }),
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 }
