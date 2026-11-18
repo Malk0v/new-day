@@ -24,7 +24,7 @@
  *    (или "Управление развёртываниями" → редактировать), иначе изменения не применятся к рабочей ссылке.
  */
 
-var SECRET_KEY = "1FqkGbJrlVwbMEK_vlwebccyTdee2_icP2mCOAQau1tacVRiSbJsKgTOm";
+var SECRET_KEY = "ЗАМЕНИТЕ_НА_СВОЙ_СЕКРЕТНЫЙ_КЛЮЧ";
 
 function doPost(e) {
   try {
